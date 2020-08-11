@@ -2,18 +2,15 @@ package com.tdi.digital.project.persistence.service.product;
 
 import com.tdi.digital.project.entitiy.ProductEntity;
 import com.tdi.digital.project.persistence.repository.product.ProductRepository;
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
 public class ProductService {
-	private String EMPTY_STRING = "";
 
 	@Autowired ProductRepository productRepository;
 
@@ -33,11 +30,9 @@ public class ProductService {
 
 	public ProductEntity createOrReplaceProduct(ProductEntity entity)
 	{
-		Optional<ProductEntity> product = productRepository.findById(entity.getId());
-
-		if(product.isPresent())
+		if(entity.getId() != null)
 		{
-			ProductEntity newEntity = product.get();
+			ProductEntity newEntity = getProductById(entity.getId());
 			newEntity.setName(entity.getName());
 			newEntity.setDescription(entity.getDescription());
 			newEntity.setPrice(entity.getPrice());
@@ -51,19 +46,19 @@ public class ProductService {
 		return productRepository.save(entity);
 	}
 
-	public ProductEntity updateProduct(ProductEntity entity, Integer id) throws ResponseStatusException {
-		ProductEntity entityToBeUpdated = getProductById(id);
+	public ProductEntity updateProduct(ProductEntity entity) throws ResponseStatusException {
+		ProductEntity entityToBeUpdated = getProductById(entity.getId());
 
-		if(!EMPTY_STRING.equals(entity.getName())) {
+		if(!isNullOrEmpty(entity.getName())) {
 			entityToBeUpdated.setName(entity.getName());
 		}
-		if(!EMPTY_STRING.equals(entity.getDescription())) {
+		if(!isNullOrEmpty(entity.getDescription())) {
 			entityToBeUpdated.setDescription(entity.getDescription());
 		}
-		if(!EMPTY_STRING.equals(entity.getPrice())) {
+		if(!isNullOrEmpty(entity.getPrice())) {
 			entityToBeUpdated.setPrice(entity.getPrice());
 		}
-		if(!EMPTY_STRING.equals(entity.getQuantity())) {
+		if(entity.getQuantity() != null) {
 			entityToBeUpdated.setQuantity(entity.getQuantity());
 		}
 
@@ -81,4 +76,8 @@ public class ProductService {
 		throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found");
 	}
 
+	private boolean isNullOrEmpty(String s) {
+		String EMPTY_STRING = "";
+		return s == null || EMPTY_STRING.equals(s);
+	}
 }

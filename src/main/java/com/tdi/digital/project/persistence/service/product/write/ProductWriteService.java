@@ -1,4 +1,4 @@
-package com.tdi.digital.project.persistence.service.product;
+package com.tdi.digital.project.persistence.service.product.write;
 
 import com.tdi.digital.project.entitiy.ProductEntity;
 import com.tdi.digital.project.persistence.repository.product.ProductRepository;
@@ -10,17 +10,11 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.Optional;
 
 @Service
-public class ProductService {
+public class ProductWriteService {
+	@Autowired
+	ProductRepository productRepository;
 
-	@Autowired ProductRepository productRepository;
-
-	public Iterable<ProductEntity> getAllProducts()
-	{
-		return productRepository.findAll();
-	}
-
-	public ProductEntity getProductById(Integer id) throws ResponseStatusException
-	{
+	private ProductEntity getProductById(Integer id) throws ResponseStatusException {
 		Optional<ProductEntity> response = productRepository.findById(id);
 		if(response.isPresent()) {
 			return response.get();
@@ -33,15 +27,14 @@ public class ProductService {
 		if(entity.getId() != null)
 		{
 			ProductEntity newEntity = getProductById(entity.getId());
+
 			newEntity.setName(entity.getName());
-			newEntity.setDescription(entity.getDescription());
 			newEntity.setPrice(entity.getPrice());
 			newEntity.setQuantity(entity.getQuantity());
 
 			newEntity = productRepository.save(newEntity);
 
 			return newEntity;
-
 		}
 		return productRepository.save(entity);
 	}
@@ -52,10 +45,7 @@ public class ProductService {
 		if(!isNullOrEmpty(entity.getName())) {
 			entityToBeUpdated.setName(entity.getName());
 		}
-		if(!isNullOrEmpty(entity.getDescription())) {
-			entityToBeUpdated.setDescription(entity.getDescription());
-		}
-		if(!isNullOrEmpty(entity.getPrice())) {
+		if(entity.getPrice() != null) {
 			entityToBeUpdated.setPrice(entity.getPrice());
 		}
 		if(entity.getQuantity() != null) {

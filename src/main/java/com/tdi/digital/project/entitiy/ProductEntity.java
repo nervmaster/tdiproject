@@ -12,8 +12,7 @@ public class ProductEntity {
 	private Integer id;
 
 	private String name;
-	private String description;
-	private String price;
+	private Integer price;
 	private Integer quantity;
 
 	public void setId(Integer id) {
@@ -24,11 +23,7 @@ public class ProductEntity {
 		this.name = name;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public void setPrice(String price) {
+	public void setPrice(Integer price) {
 		this.price = price;
 	}
 
@@ -44,11 +39,7 @@ public class ProductEntity {
 		return name;
 	}
 
-	public String getDescription() {
-		return description;
-	}
-
-	public String getPrice() {
+	public Integer getPrice() {
 		return price;
 	}
 

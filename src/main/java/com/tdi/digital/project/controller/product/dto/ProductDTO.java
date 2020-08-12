@@ -4,24 +4,18 @@ public class ProductDTO {
 
     private Integer id;
     private String name;
-    private String description;
-    private String price;
+    private Integer price;
     private Integer quantity;
 
     public String getName() {
         return name;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public String getPrice() {
+    public Integer getPrice() {
         return price;
     }
 
     public Integer getQuantity() {
         return quantity;
     }
-
 }
